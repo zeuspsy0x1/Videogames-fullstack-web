@@ -19,6 +19,9 @@
 //     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 const server = require('./src/app.js');
 const { conn } = require('./src/db.js');
+const { dbGetGenres } = require('../api/src/controllers/dbFunctions');
+const sequelize = require('sequelize');
+const Genre = require('../api/src/db').Genre;
 
 // Syncing all the models at once.
 conn.sync({ force: false }).then(() => {
@@ -26,3 +29,5 @@ conn.sync({ force: false }).then(() => {
 		console.log('%s listening at 5000'); // eslint-disable-line no-console
 	});
 });
+
+dbGetGenres(); // Ejecuto la función para obtener los géneros de la api y mandarlos a la base de datos.

@@ -1,21 +1,15 @@
 const { Router } = require('express');
-const { getAllVideogames, getById, getByName } = require('../controllers/getAllVideogames');
+const Genre = require('../db').Genre;
+const sequelize = require('../db').sequelize;
+const Videogame = require('../db').Videogame;
+const { getAllVideogames, getById, getByName } = require('../controllers/apiFunctions');
+const { dbFetchAllGenres } = require('../controllers/dbFunctions');
 // Importar todos los routers;
 // Ejemplo: const authRouter = require('./auth.js');
-
 const router = Router();
 
-/*
-1. entender y practicar los joins/eager loading de sequelize.
-2. Dejar hechas las rutas y los filtros -1(porque hay 1 filtro que va en REACT)
-3. 
- */
-
-// Configurar los routers
-// Ejemplo: router.use('/auth', authRouter);
-
 //GET /videogames
-router.use('/', async function (req, res) {
+router.get('/allVideogames', async function (req, res) {
 	let v = await getAllVideogames();
 	if (v) {
 		res.status(200).json(v);
@@ -25,8 +19,8 @@ router.use('/', async function (req, res) {
 });
 
 //GET /videogames?name="..."
-router.use('/?', async function (req, res) {
-	const name = req.query.name;
+router.get('/videogames?', async function (req, res) {
+	const { name } = req.query;
 	console.log(name);
 	const getName = await getByName(name);
 	if (!getName) {
@@ -36,7 +30,7 @@ router.use('/?', async function (req, res) {
 	}
 });
 //GET /videogames/:id
-router.use('/:id', async function (req, res) {
+router.get('/videogames/:id', async function (req, res) {
 	const id = req.params.id;
 	console.log(id);
 	let vById = await getById(id);
@@ -48,10 +42,41 @@ router.use('/:id', async function (req, res) {
 	}
 });
 
-//POST /videogames
-router.use('/add', async function (req, res) {
-	const { videogame } = req.body;
-	console.log(videogame);
+//POST /videogames/add
+router.post('/videogames/add', async function (req, res) {
+	try {
+		const { videogame } = req.body;
+		let vApiGenres = videogame.vApiGenres;
+		let createNewVideogame = [];
+		let videogameWithGenreRelationship = [];
+		let searchingVideogameIdInDb = await Videogame.findOne({
+			where: { apiOrInputId: videogame.apiOrInputId },
+		});
+
+		if (searchingVideogameIdInDb) {
+			res.status(400).json({ message: 'there is already a videogame with that id' });
+		} else {
+			createNewVideogame = await Videogame.create(videogame);
+
+			for (let i = 0; i < videogame.vApiGenres.length; i++) {
+				videogameWithGenreRelationship[i] = await createNewVideogame.addGenre(vApiGenres[i]);
+			}
+			res.status(200).json({ message: 'videogame and relations created successfully' });
+		}
+	} catch (error) {
+		console.log(error);
+	}
+});
+
+//Get /genres
+router.get('/genres', async function (req, res) {
+	let gen = await dbFetchAllGenres();
+
+	if (gen) {
+		res.status(200).json(gen);
+	} else {
+		res.status(400).json({ message: 'the are no genres' });
+	}
 });
 
 module.exports = router;

@@ -7,8 +7,14 @@ module.exports = (sequelize) => {
 		id: {
 			type: DataTypes.UUID,
 			defaultValue: DataTypes.UUIDV4,
-			allowNull: false,
+			allowNull: true,
 			primaryKey: true,
+			autoincrement: true,
+		},
+		apiOrInputId: {
+			type: DataTypes.INTEGER,
+			allowNull: false,
+			unique: true,
 		},
 		name: {
 			type: DataTypes.STRING,
@@ -31,7 +37,11 @@ module.exports = (sequelize) => {
 			allowNull: false,
 		},
 		platforms: {
-			type: DataTypes.STRING,
+			type: DataTypes.ARRAY(DataTypes.STRING),
+			allowNull: false,
+		},
+		vApiGenres: {
+			type: DataTypes.ARRAY(DataTypes.STRING),
 			allowNull: false,
 		},
 	});

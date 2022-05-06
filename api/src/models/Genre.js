@@ -6,7 +6,9 @@ module.exports = (sequelize) => {
 	sequelize.define('genre', {
 		id: {
 			primaryKey: true,
-			type: DataTypes.UUID,
+			type: DataTypes.INTEGER,
+			/* type: DataTypes.UUID,
+			defaultValue: DataTypes.UUIDV4, */
 			allowNull: false,
 		},
 

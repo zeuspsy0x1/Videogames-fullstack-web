@@ -19,6 +19,9 @@ const getById = async (id) => {
 				platforms: v.platforms.map((p) => {
 					return p.platform.name;
 				}),
+				vApiGenres: v.genres.map((g) => {
+					return g.name;
+				}),
 			};
 		});
 		//console.log(vData);
@@ -101,46 +104,6 @@ const getByName = async (name) => {
 };
 
 //getByName('portal');
-
-/* const getByName = async (name) => {
-	try {
-		let vByNameFiltrados = [];
-		if (name) {
-			await axios
-				.get(
-					`https://api.rawg.io/api/games?key=fa8091ff50474dd4bcc5a3a447510f85&search=${name}`
-				)
-				.then(async (res) => {
-					let resultados = res.data.results;
-					vByNameFiltrados = await resultados.map((v) => {
-						return {
-							id: v.id,
-							name: v.name,
-							description: v.id, //SUBQUERY CON EL ID, SE SACA Y SE PONE AQUI, HASTA QUE NO SE HAGA ESO, NO SE RETORNA DESCRIPCION, SE ESTA MANDANDO UNDEFINED EN DESCRIPTION...
-							image: v.background_image,
-							publishDate: v.released,
-							rating: v.rating,
-							platforms: v.platforms.map((p) => {
-								return p.platform.name;
-							}),
-						};
-					});
-					//console.log(vByNameFiltrados);
-				});
-
-			//if (vByNameFiltrados.length > 0) {return vByNameFiltrados;} else { dbFindByName('nombre a buscar');}
-
-			return vByNameFiltrados;
-			//console.log(vByNameFiltrados);
-		} else if (!name) {
-			console.log({ message: 'Theres no name in req.query' });
-		}
-	} catch (error) {
-		console.log(error);
-	}
-};
-
-//getByName('portal'); */
 
 module.exports = {
 	getById,
