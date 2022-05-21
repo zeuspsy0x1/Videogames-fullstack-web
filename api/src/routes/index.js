@@ -3,7 +3,7 @@ const Genre = require('../db').Genre;
 const sequelize = require('../db').sequelize;
 const Videogame = require('../db').Videogame;
 const { getAllVideogames, getById, getByName } = require('../controllers/apiFunctions');
-const { dbFetchAllGenres } = require('../controllers/dbFunctions');
+const { dbFetchAllGenres, getVideogameGenreByNameAndReturnId } = require('../controllers/dbFunctions');
 // Importar todos los routers;
 // Ejemplo: const authRouter = require('./auth.js');
 const router = Router();
@@ -45,30 +45,57 @@ router.get('/videogames/:id', async function (req, res) {
 //POST /videogames/add
 router.post('/videogames/add', async function (req, res) {
 	try {
-		const { videogame } = req.body;
-		let vApiGenres = videogame.vApiGenres;
+		const { name, rating, publishDate, description, image, vApiGenres, platforms, created } = req.body;
+
+		const videogame = {
+			name: name,
+			rating: rating,
+			publishDate: publishDate,
+			description: description,
+			image: image,
+			vApiGenres: vApiGenres,
+			platforms: platforms,
+			created: created,
+		};
+
+		//console.log(videogame);
+
 		let createNewVideogame = [];
 		let videogameWithGenreRelationship = [];
+
+		/* CONFIRMAR QUE NO EXISTE EL VIDEOJUEGO POR NOMBRE EN LA BASE DE DATOS
+		
 		let searchingVideogameIdInDb = await Videogame.findOne({
-			where: { apiOrInputId: videogame.apiOrInputId },
+			where: { name: videogame.name },
 		});
 
 		if (searchingVideogameIdInDb) {
-			res.status(400).json({ message: 'there is already a videogame with that id' });
+			res.status(400).json({ message: 'there is already a videogame with that name' });
 		} else {
 			createNewVideogame = await Videogame.create(videogame);
 
 			for (let i = 0; i < videogame.vApiGenres.length; i++) {
+				//console.log(vApiGenres[i]);
 				videogameWithGenreRelationship[i] = await createNewVideogame.addGenre(vApiGenres[i]);
 			}
-			res.status(200).json({ message: 'videogame and relations created successfully' });
+			res.status(200).json({ message: 'videogame and relationships created successfully' });
 		}
+		
+		*/
+
+		createNewVideogame = await Videogame.create(videogame);
+
+		for (let i = 0; i < videogame.vApiGenres.length; i++) {
+			//console.log(vApiGenres[i]);
+			videogameWithGenreRelationship[i] = await createNewVideogame.addGenre(vApiGenres[i]);
+		}
+		res.status(200).json({ message: 'videogame and relationships created successfully' });
 	} catch (error) {
 		console.log(error);
 	}
 });
 
-//Get /genres
+//Get /genres from db
 router.get('/genres', async function (req, res) {
 	let gen = await dbFetchAllGenres();
 

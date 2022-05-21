@@ -11,11 +11,11 @@ module.exports = (sequelize) => {
 			primaryKey: true,
 			autoincrement: true,
 		},
-		apiOrInputId: {
-			type: DataTypes.INTEGER,
-			allowNull: false,
+		/* apiOrInputId: {
+			type: DataTypes.DECIMAL,
+			allowNull: true,
 			unique: true,
-		},
+		}, */
 		name: {
 			type: DataTypes.STRING,
 			allowNull: false,
@@ -42,6 +42,10 @@ module.exports = (sequelize) => {
 		},
 		vApiGenres: {
 			type: DataTypes.ARRAY(DataTypes.STRING),
+			allowNull: false,
+		},
+		created: {
+			type: DataTypes.BOOLEAN,
 			allowNull: false,
 		},
 	});

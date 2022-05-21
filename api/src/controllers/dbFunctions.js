@@ -11,7 +11,7 @@ const dbGetGenres = async () => {
 		if (genresOrNot.length === 0) {
 			/////////////////////////
 			console.log('there are no genres in the db, restart the server again to get them');
-			let response = await axios.get(`https://api.rawg.io/api/genres?key=fa8091ff50474dd4bcc5a3a447510f85`);
+			let response = await axios.get(`https://api.rawg.io/api/genres?key=246561ca3d1b44d1877ac14e4ffc9ef5`);
 
 			let genresMap = response.data.results.map((g) => {
 				return {

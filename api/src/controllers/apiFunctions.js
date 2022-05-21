@@ -36,20 +36,19 @@ const getById = async (id) => {
 //me traigo todos los juegos y los retorno en un solo [{}]
 //EeeeeeeeeeeN EL FOR VA i < 100
 const getAllVideogames = async () => {
-	let endpoints = [
-		axios.get(`https://api.rawg.io/api/games?key=246561ca3d1b44d1877ac14e4ffc9ef5`),
-		//axios.get(`https://api.rawg.io/api/games?key=246561ca3d1b44d1877ac14e4ffc9ef5&page=2`),
-		//axios.get(`https://api.rawg.io/api/games?key=246561ca3d1b44d1877ac14e4ffc9ef5&page=3`),
-		//axios.get(`https://api.rawg.io/api/games?key=246561ca3d1b44d1877ac14e4ffc9ef5&page=4`),
-		//axios.get(`https://api.rawg.io/api/games?key=246561ca3d1b44d1877ac14e4ffc9ef5&page=5`),
-	];
-	const api = await Promise.all(endpoints);
-
-	let arrOfIds = [];
-	let vPromisesByID = [];
-	let videogamesFromApi = [];
-
 	try {
+		let endpoints = [
+			axios.get(`https://api.rawg.io/api/games?key=246561ca3d1b44d1877ac14e4ffc9ef5`),
+			//axios.get(`https://api.rawg.io/api/games?key=246561ca3d1b44d1877ac14e4ffc9ef5&page=2`),
+			//axios.get(`https://api.rawg.io/api/games?key=246561ca3d1b44d1877ac14e4ffc9ef5&page=3`),
+			//axios.get(`https://api.rawg.io/api/games?key=246561ca3d1b44d1877ac14e4ffc9ef5&page=4`),
+			//axios.get(`https://api.rawg.io/api/games?key=246561ca3d1b44d1877ac14e4ffc9ef5&page=5`),
+		];
+		const api = await Promise.all(endpoints);
+
+		let arrOfIds = [];
+		let vPromisesByID = [];
+		let videogamesFromApi = [];
 		for (let i = 0; i < api.length; i++) {
 			arr = api[i].data.results.map((v) => {
 				return v.id;
